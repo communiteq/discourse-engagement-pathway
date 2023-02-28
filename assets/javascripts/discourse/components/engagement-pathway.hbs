@@ -1,0 +1,21 @@
+ <div class="engagement-pathway-wrapper">
+    <div class="wrap engagement-pathway-banner">
+        <div class="ep-wrapper">
+            <div class="ep-content">
+            {{{message}}}
+            </div>
+            <div class="ep-level-task">
+              {{#each tasks as |t|}}
+                <div>
+                  <a href="{{t.url}}">
+                    <h3 class={{t.status}}>
+                      {{d-icon t.icon}}
+                      {{t.text}}
+                    </h3>
+                  </a>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>

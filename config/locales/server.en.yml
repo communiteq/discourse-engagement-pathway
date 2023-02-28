@@ -1,0 +1,15 @@
+en:
+  site_settings: 
+    engagement_pathway_enabled: "Enable Engagement Pathway plugin"
+    engagement_pathway_level_1a: "Requirements for level 1A.<br>R=read N posts, L=liked N posts, T=created N topics in category X except category Y, P=created N posts in category X except category Y, I=invited N people."
+    engagement_pathway_level_1b: "Requirements for level 1B"
+    engagement_pathway_level_1c: "Requirements for level 1C"
+    engagement_pathway_level_2a: "Requirements for level 2A"
+    engagement_pathway_level_2b: "Requirements for level 2B"
+    engagement_pathway_level_2c: "Requirements for level 2C"
+    engagement_pathway_level_3a: "Requirements for level 3A"
+    engagement_pathway_level_3b: "Requirements for level 3B"
+    engagement_pathway_level_3c: "Requirements for level 3C"
+    engagement_pathway_level_4a: "Requirements for level 4A"
+    engagement_pathway_level_4b: "Requirements for level 4B"
+    engagement_pathway_level_4c: "Requirements for level 4C"

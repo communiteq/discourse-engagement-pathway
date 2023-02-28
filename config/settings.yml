@@ -1,0 +1,28 @@
+plugins:
+  engagement_pathway_enabled:
+    default: false
+    client: true
+  engagement_pathway_level_1a: 
+    default: "V"
+  engagement_pathway_level_1b:
+    default: "R;10"
+  engagement_pathway_level_1c:
+    default: "L;5"
+  engagement_pathway_level_2a: 
+    default: "T;1;3"
+  engagement_pathway_level_2b:
+    default: "R;20"
+  engagement_pathway_level_2c:
+    default: "L;10"
+  engagement_pathway_level_3a: 
+    default: "P;3;4"
+  engagement_pathway_level_3b:
+    default: "R;50"
+  engagement_pathway_level_3c:
+    default: "L;20"
+  engagement_pathway_level_4a: 
+    default: "P;1;5"
+  engagement_pathway_level_4b:
+    default: "T;1;;3"
+  engagement_pathway_level_4c:
+    default: "I;5"
