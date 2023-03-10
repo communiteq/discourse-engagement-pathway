@@ -18,76 +18,100 @@ after_initialize do
 
   require_dependency "user"
   class ::User
+    def recalculate_ep_level
+      self.custom_fields.delete("engagement_info")
+      self.evaluate_ep_level
+    end
+
     def set_current_ep_level(level, goals)
       info = {
         level: level,
-        goals: goals
-      }
-      self.custom_fields[:engagement_info] = info
-      self.save_custom_fields
+        goals: goals,
+        likes_received: self&.user_stat&.likes_received,
+        posts_read_count: self&.user_stat&.posts_read_count,
+        contribution_count: self&.user_stat&.topic_count + self&.user_stat&.post_count,
+      }.map { |k, v| [k.to_s, v] }.to_h
 
-      MessageBus.publish('/engagement_pathway', info, user_ids: [self.id])
+      if self.custom_fields[:engagement_info] != info
+        self.custom_fields[:engagement_info] = info
+        self.save_custom_fields
+        MessageBus.publish('/engagement_pathway', info, user_ids: [self.id])
+      end
     end
 
     def evaluate_ep_level
-      current_info = self.custom_fields[:engagement_info] || {level: 1, goals: {a: false, b: false, c: false}}
-      puts current_info.inspect
+      current_info = self.custom_fields[:engagement_info].dup || {level: 1, goals: {a: true, b: false, c: false}}
 
       changed = false
       failed = false
 
-      until failed do
-        current_level = current_info[:level]
-        ['a', 'b', 'c'].each do |goal|
-          unless current_info[:goals][goal]
-            begin
-              req = SiteSetting.send("engagement_pathway_level_#{current_level}#{goal}")
-              req_type, req_amnt, req_cat, req_ncat = req.split(";")
+      if current_info[:level] < 5
+        until failed do
+          current_level = current_info[:level]
+          ['a', 'b', 'c'].each do |goal|
+            unless current_info[:goals][goal]
+              begin
+                req = SiteSetting.send("engagement_pathway_level_#{current_level}#{goal}")
+                req_type, req_amnt, req_cat, req_ncat = req.split(";")
 
-              case req_type
-              when 'R' # read
-                ok = self.user_stat.posts_read_count >= req_amnt.to_i
-              when 'L' # like
-                ok = self.user_stat.likes_given >= req_amnt.to_i
-              when 'T' # create topic
-                cnt = self.topics
-                cnt = cnt.where(category_id: req_cat.split(',')) unless req_cat.nil? || req_cat.empty?
-                cnt = cnt.where.not(category_id: req_ncat.split(',')) unless req_ncat.nil? || req_ncat.empty?
-                ok = cnt.count >= req_amnt.to_i
-              when 'P' # create post
-                cnt = Post.joins(:topic).where(user_id: self.id)
-                cnt = cnt.where(topics: {category_id: req_cat.split(',')}) unless req_cat.nil? || req_cat.empty?
-                cnt = cnt.where.not(topics: {category_id: req_ncat.split(',')}) unless req_ncat.nil? || req_ncat.empty?
-                ok = cnt.count >= req_amnt.to_i
-              when 'I' # invite
-                cnt = self.invites
-                ok = cnt.count >= req_amnt.to_i
-              when 'V'
-                ok = true
+                case req_type
+                when 'R' # read
+                  ok = self.user_stat.posts_read_count >= req_amnt.to_i
+                when 'L' # like
+                  ok = self.user_stat.likes_given >= req_amnt.to_i
+                when 'T' # create topic
+                  cnt = self.topics
+                  cnt = cnt.where(category_id: req_cat.split(',')) unless req_cat.nil? || req_cat.empty?
+                  cnt = cnt.where.not(category_id: req_ncat.split(',')) unless req_ncat.nil? || req_ncat.empty?
+                  ok = cnt.count >= req_amnt.to_i
+                when 'P' # create post
+                  cnt = Post.joins(:topic).where(user_id: self.id)
+                  cnt = cnt.where(topics: {category_id: req_cat.split(',')}) unless req_cat.nil? || req_cat.empty?
+                  cnt = cnt.where.not(topics: {category_id: req_ncat.split(',')}) unless req_ncat.nil? || req_ncat.empty?
+                  ok = cnt.count >= req_amnt.to_i
+                when 'I' # invite
+                  cnt = self.invites
+                  ok = cnt.count >= req_amnt.to_i
+                when 'V'
+                  ok = true
+                end
+              rescue => e
+                ok = false
               end
-            rescue => e
-              ok = false
+              if ok
+                current_info[:goals][goal] = true
+                changed = true
+              else
+                failed = true
+              end
             end
-            if ok
-              current_info[:goals][goal] = true
-              changed = true
-            else
-              failed = true
-            end
-          end
-        end # a b c
-        break if failed
+          end # a b c
+          break if failed
 
-        current_info[:level] = current_level + 1
-        current_info[:goals] = {a: false, b: false, c: false}
-        if current_level > 10
-          failed = true
+          current_info[:level] = current_level + 1
+          current_info[:goals] = {a: false, b: false, c: false}
+          if current_level > 10
+            failed = true
+          end
+        end # until failed
+      end # level < 5
+
+      is_member = self.groups.pluck(:name).to_a.include?(SiteSetting.engagement_pathway_boss_group)
+      if current_info[:level] == 5
+        if is_member
+          current_info[:level] = 6
+          changed = true
         end
-      end # until failed
-      
-      if changed
-        self.set_current_ep_level(current_info[:level], current_info[:goals])
       end
+      if current_info[:level] == 6
+        if !is_member
+          current_info[:level] = 5
+          changed = true
+        end
+      end
+
+      self.set_current_ep_level(current_info[:level], current_info[:goals])
+      current_info
     end
   end
 
@@ -108,6 +132,18 @@ after_initialize do
 
   class ::Invite
     include ::EPExtensions::InviteExtension
+  end
+
+  DiscourseEvent.on(:user_added_to_group) do |user|
+    if SiteSetting.engagement_pathway_enabled
+      user&.evaluate_ep_level
+    end
+  end
+
+  DiscourseEvent.on(:user_removed_from_group) do |user|
+    if SiteSetting.engagement_pathway_enabled
+      user&.evaluate_ep_level
+    end
   end
 
   DiscourseEvent.on(:post_created) do |post|

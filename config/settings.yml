@@ -26,3 +26,5 @@ plugins:
     default: "T;1;;3"
   engagement_pathway_level_4c:
     default: "I;5"
+  engagement_pathway_boss_group: 
+    default: "MissionalPartners"

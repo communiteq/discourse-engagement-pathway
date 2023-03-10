@@ -1,11 +1,12 @@
 en:
   js:
     engagement_pathway:
+      completed_icon: "check"
       level_0_message: 'Welcome to Uncommon Pursuit!<br>Please <a href="https://uncommonpursuit.memberful.com/register">create an account</a> or <a href="https://uncommonpursuit.memberful.com/auth/sign_in">sign in</a>.'
       level_0a_icon: "play"
       level_0a_text: "Why Join?"
       level_0a_link: "https://www.youtube.com/watch?v=bnIAFK_h8Xc"
-      level_0b_icon: "cloud-upload"
+      level_0b_icon: "cloud-upload-alt"
       level_0b_text: "Take a free Course"
       level_0b_link: "https://uncommonpursuit.net/12stepsbible"
       level_0c_icon: "book-reader"
@@ -31,8 +32,8 @@ en:
       level_2c_icon: "heart"
       level_2c_text: "Like 10 Posts"
       level_2c_link: "/top?period=monthly"
-      level_3_message: 'Well done!'
-      level_3a_icon: "cloud-upload"
+      level_3_message: '<h1>Well done!</h1>'
+      level_3a_icon: "cloud-upload-alt"
       level_3a_text: "Participate in 12 Steps to God"
       level_3a_link: "https://up.uncommonpursuit.net/c/getting-started/12-steps-to-spiritual-growth/36"
       level_3b_icon: "book-reader"
@@ -42,7 +43,7 @@ en:
       level_3c_text: "Like 20 Posts"
       level_3c_link: "/top?period=monthly"           
       level_4_message: 'Almost done!'
-      level_4a_icon: "cloud-upload"
+      level_4a_icon: "cloud-upload-alt"
       level_4a_text: "Participate in StartUP"
       level_4a_link: "https://up.uncommonpursuit.net/c/getting-started/5/none"
       level_4b_icon: "pencil-alt"
@@ -50,4 +51,15 @@ en:
       level_4b_link: "https://up.uncommonpursuit.net/new-topic"
       level_4c_icon: "group-plus"
       level_4c_text: "Invite 5 Friends"
-      level_4c_link: "/my/invited/pending"         
+      level_4c_link: "/my/invited/pending"
+      endlevel_contrib: "You've contributed {{count}} times"
+      endlevel_viewed: "Your posts have been viewed {{count}} times"
+      endlevel_liked: "You've received {{count}} likes"
+      level_5_header: ""
+      level_5_html_1: '<a href="https://uncommonpursuit.net/missional-partnership">Become a Missional Partner</a>'
+      level_5_html_2: ""
+      level_5_html_3: ""
+      level_6_header: "Quick Links"
+      level_6_html_1: '<a href="https://up.uncommonpursuit.net/c/missional-partners/missional-prompts/11">Missional Prompts</a>'
+      level_6_html_2: '<a href="https://up.uncommonpursuit.net/t/missional-partner-meetings-2022-schedule/480">Missional Partner Meetings</a>'
+      level_6_html_3: '<a href="https://up.uncommonpursuit.net/c/up-courses/together/38">Discuss Together</a>'

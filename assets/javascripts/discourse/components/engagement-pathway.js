@@ -2,24 +2,42 @@ import Component from "@glimmer/component";
 import { inject as service } from "@ember/service";
 import { bind } from "discourse-common/utils/decorators";
 import { tracked } from "@glimmer/tracking";
+import discourseComputed from "discourse-common/utils/decorators";
 
 export default class EngagementPathway extends Component {
   @service messageBus;
   @service currentUser;
-
-  @tracked level = 0;
+  @service router;
 
   @tracked tasks = [];
-  @tracked message = ''
+  @tracked message = '';
+
+  @tracked endlevel = false;
+  @tracked info = [];
+  @tracked header = '';
+  @tracked links = [];
+
+  @tracked showHere = false;
 
   constructor() {
     super(...arguments);
+    this.#setShowHere();
+    this.router.on("routeDidChange", this, this.#setShowHere);
     this.subscribe();
     if (this.currentUser) {
       this._processMessage(this.currentUser.engagement_info || {level:1} );
     } else {
       this._processMessage({level: 0});
     }
+  }
+
+  willDestroy() {
+    this.unsubscribe();
+    this.router.off("routeDidChange", this, this.#setShowHere);
+  }
+  
+  #setShowHere() {
+    this.showHere = (['discovery.latest', 'discovery.unread', 'discovery.top', 'discovery.new', 'discovery.categories'].includes(this.router.currentRouteName));
   }
 
   @bind
@@ -37,22 +55,38 @@ export default class EngagementPathway extends Component {
 
   @bind
   _processMessage(data) {
-    var t = [];
-    const goals = ['a', 'b', 'c'];
-    goals.forEach((goal) => {
-      var completed = '';
-      if (data.goals) {
-        completed = (data?.goals[goal] ? 'completed' : '');
-      }
-      t.push({
-        url:  I18n.t(`engagement_pathway.level_${data.level}${goal}_link`),
-        icon: I18n.t(`engagement_pathway.level_${data.level}${goal}_icon`), 
-        text: I18n.t(`engagement_pathway.level_${data.level}${goal}_text`), 
-        status: completed
+    if (data.level < 5) {
+      var t = [];
+      const goals = ['a', 'b', 'c'];
+      goals.forEach((goal) => {
+        var completed = '';
+        if (data.goals) {
+          completed = (data?.goals[goal] ? 'completed' : '');
+        }
+        t.push({
+          url:  I18n.t(`engagement_pathway.level_${data.level}${goal}_link`),
+          icon: I18n.t(`engagement_pathway.level_${data.level}${goal}_icon`), 
+          text: I18n.t(`engagement_pathway.level_${data.level}${goal}_text`), 
+          status: completed
+        });
       });
-    });
-    this.tasks = t;
-    this.message = I18n.t(`engagement_pathway.level_${data.level}_message`);
+      this.endlevel = false
+      this.tasks = t;
+      this.message = I18n.t(`engagement_pathway.level_${data.level}_message`);
+    } else {
+      this.info = [
+        { html: I18n.t("engagement_pathway.endlevel_contrib", { count: data.contribution_count || 0 })},
+        { html: I18n.t("engagement_pathway.endlevel_viewed", { count: data.posts_read_count || 0 })},
+        { html: I18n.t("engagement_pathway.endlevel_liked", { count: data.likes_received || 0 })}
+      ];
+      this.header = I18n.t(`engagement_pathway.level_${data.level}_header`);
+      this.links = [
+        { html: I18n.t(`engagement_pathway.level_${data.level}_html_1`) },
+        { html: I18n.t(`engagement_pathway.level_${data.level}_html_2`) },
+        { html: I18n.t(`engagement_pathway.level_${data.level}_html_3`) },
+      ];
+      this.endlevel = true;
+    }
   }
 }
 
