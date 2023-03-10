@@ -25,7 +25,7 @@ export default class EngagementPathway extends Component {
     this.router.on("routeDidChange", this, this.#setShowHere);
     this.subscribe();
     if (this.currentUser) {
-      this._processMessage(this.currentUser.engagement_info || {level:1} );
+      this._processMessage(this.currentUser.engagement_info || {level:1, goals: { a: true }} );
     } else {
       this._processMessage({level: 0});
     }
