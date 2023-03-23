@@ -49,7 +49,7 @@ en:
       level_4b_icon: "pencil-alt"
       level_4b_text: "Start a Conversation"
       level_4b_link: "https://up.uncommonpursuit.net/new-topic"
-      level_4c_icon: "group-plus"
+      level_4c_icon: "user-friends"
       level_4c_text: "Invite 5 Friends"
       level_4c_link: "/my/invited/pending"
       endlevel_contrib: "You've contributed {{count}} times"
@@ -59,7 +59,7 @@ en:
       level_5_html_1: '<a href="https://uncommonpursuit.net/missional-partnership">Become a Missional Partner</a>'
       level_5_html_2: ""
       level_5_html_3: ""
-      level_6_header: "Quick Links"
+      level_6_header: "<b>Quick Links:</b>"
       level_6_html_1: '<a href="https://up.uncommonpursuit.net/c/missional-partners/missional-prompts/11">Missional Prompts</a>'
-      level_6_html_2: '<a href="https://up.uncommonpursuit.net/t/missional-partner-meetings-2022-schedule/480">Missional Partner Meetings</a>'
+      level_6_html_2: '<a href="https://up.uncommonpursuit.net/t/missional-partner-meetings-2023-schedule/936">Missional Partner Meetings</a>'
       level_6_html_3: '<a href="https://up.uncommonpursuit.net/c/up-courses/together/38">Discuss Together</a>'
