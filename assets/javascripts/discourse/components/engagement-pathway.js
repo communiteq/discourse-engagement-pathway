@@ -17,6 +17,9 @@ export default class EngagementPathway extends Component {
   @tracked header = '';
   @tracked links = [];
 
+  @tracked emojiSrc = '/images/emoji/twitter/fireworks.png?v=12';
+  @tracked showEmoji = true;
+
   @tracked showHere = false;
 
   constructor() {
@@ -85,6 +88,12 @@ export default class EngagementPathway extends Component {
         { html: I18n.t(`engagement_pathway.level_${data.level}_html_2`) },
         { html: I18n.t(`engagement_pathway.level_${data.level}_html_3`) },
       ];
+
+      var score = (data.contribution_count || 0) + (data.likes_received || 0)
+      var emoji_from = data.emoji_from || 0;
+      this.showEmoji =  (emoji_from > 0) && (score >= emoji_from) && (score <= (data.emoji_to || 0))
+      this.emojiSrc = `/images/emoji/twitter/${data.emoji}.png?v=12`
+
       this.endlevel = true;
     }
   }

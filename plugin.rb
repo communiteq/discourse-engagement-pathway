@@ -1,6 +1,6 @@
 # name: discourse-engagement-pathway
 # about: Discourse Engagement Pathway plugin
-# version: 1.0
+# version: 1.1
 # authors: richard@communiteq.com
 # url: https://www.communiteq.com/
 
@@ -23,10 +23,13 @@ after_initialize do
       self.evaluate_ep_level
     end
 
-    def set_current_ep_level(level, goals)
+    def set_current_ep_level(current_info)
       info = {
-        level: level,
-        goals: goals,
+        level: current_info[:level],
+        goals: current_info[:goals],
+        emoji: current_info[:emoji] || '',
+        emoji_from: current_info[:emoji_from] || 0,
+        emoji_to: current_info[:emoji_to] || 0,
         likes_received: self&.user_stat&.likes_received,
         posts_read_count: self&.user_stat&.posts_read_count,
         contribution_count: self&.user_stat&.topic_count + self&.user_stat&.post_count,
@@ -96,6 +99,30 @@ after_initialize do
         end # until failed
       end # level < 5
 
+      if current_info[:level] >= 5
+        emoji_from = current_info[:emoji_from] || 0
+        score = self&.user_stat&.topic_count + self&.user_stat&.post_count + self&.user_stat&.likes_received
+        if emoji_from == 0 ## first time
+          current_info[:emoji_from] = score
+          current_info[:emoji_to] = score + 10
+          current_info[:emoji] = 'fireworks'
+          changed = true
+        else
+          if score > current_info[:emoji_to]
+            current_info[:emoji_from] = score + rand(25) + 10
+            current_info[:emoji_to] = current_info[:emoji_from] + 10
+            choices = [
+              "fireworks", "pray", "star_struck", "partying_face", "sunglasses", "boom", "+1",
+              "raised_hands", "seedling", "fire", "tada", "medal_military", "trophy",
+              "white_check_mark", "smiley", "yellow_heart", "clap", "rocket",
+              "stars", "medal_sports", "ballot_box_with_check"
+            ]
+            current_info[:emoji] = choices[rand(choices.length)]
+            changed = true
+          end
+        end
+      end
+
       is_member = self.groups.pluck(:name).to_a.include?(SiteSetting.engagement_pathway_boss_group)
       if current_info[:level] == 5
         if is_member
@@ -110,7 +137,7 @@ after_initialize do
         end
       end
 
-      self.set_current_ep_level(current_info[:level], current_info[:goals])
+      self.set_current_ep_level(current_info)
       current_info
     end
   end
@@ -155,6 +182,7 @@ after_initialize do
   DiscourseEvent.on(:like_created) do |like|
     if SiteSetting.engagement_pathway_enabled
       like&.user&.evaluate_ep_level
+      like&.post&.user&.evaluate_ep_level
     end
   end
 end
