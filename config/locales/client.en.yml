@@ -5,7 +5,7 @@ en:
       level_0_message: 'Welcome to Uncommon Pursuit!<br>Please <a href="https://uncommonpursuit.memberful.com/register">create an account</a> or <a href="https://uncommonpursuit.memberful.com/auth/sign_in">sign in</a>.'
       level_0a_icon: "play"
       level_0a_text: "Why Join?"
-      level_0a_link: "https://www.youtube.com/watch?v=bnIAFK_h8Xc"
+      level_0a_link: "https://up.uncommonpursuit.net/t/why-join-uncommon-pursuit/1557"
       level_0b_icon: "cloud-upload-alt"
       level_0b_text: "Take a free Course"
       level_0b_link: "https://uncommonpursuit.net/12stepsbible"
@@ -55,6 +55,7 @@ en:
       endlevel_contrib: "You've contributed {{count}} times"
       endlevel_viewed: "Your posts have been viewed {{count}} times"
       endlevel_liked: "You've received {{count}} likes"
+      endlevel_message: "Thank you for participating in our mission!"
       level_5_header: ""
       level_5_html_1: '<a href="https://uncommonpursuit.net/missional-partnership">Become a Missional Partner</a>'
       level_5_html_2: ""
