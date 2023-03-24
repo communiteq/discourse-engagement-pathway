@@ -1,12 +1,14 @@
 # name: discourse-engagement-pathway
 # about: Discourse Engagement Pathway plugin
-# version: 1.2
+# version: 1.3
 # authors: richard@communiteq.com
 # url: https://www.communiteq.com/
 
 enabled_site_setting :engagement_pathway_enabled
 
 register_asset "stylesheets/common.scss"
+register_asset "stylesheets/mobile.scss", :mobile
+register_asset "stylesheets/desktop.scss", :desktop
 
 after_initialize do
 
@@ -26,7 +28,7 @@ after_initialize do
     def set_current_ep_level(current_info)
       info = {
         level: current_info[:level],
-        goals: current_info[:goals],
+        goals: current_info[:goals].map { |k, v| [k.to_s, v] }.to_h,
         emoji: current_info[:emoji] || '',
         emoji_from: current_info[:emoji_from] || 0,
         emoji_to: current_info[:emoji_to] || 0,
@@ -40,6 +42,7 @@ after_initialize do
         self.save_custom_fields
         MessageBus.publish('/engagement_pathway', info, user_ids: [self.id])
       end
+      info
     end
 
     def evaluate_ep_level
@@ -138,7 +141,6 @@ after_initialize do
       end
 
       self.set_current_ep_level(current_info)
-      current_info
     end
   end
 

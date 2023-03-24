@@ -13,7 +13,6 @@
     background-color: var(--secondary);
 }
 .ep-wrapper {
-    display: flex;
     align-items: center;
     padding: 0.5em;
 
@@ -24,6 +23,7 @@
 
     .ep-content {
         flex: 1 0 33%;
+        font-size: 1.2em;
     }
 
     .ep-level-task {
@@ -48,7 +48,6 @@
                     line-height: 1.2;
                     margin: 0;
                     min-width: 0;
-                    font-size: var(--font-up-1);
                     svg {
                         display: block;
                         font-size: 1.75em;
