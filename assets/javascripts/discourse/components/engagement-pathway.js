@@ -3,6 +3,7 @@ import { inject as service } from "@ember/service";
 import { bind } from "discourse-common/utils/decorators";
 import { tracked } from "@glimmer/tracking";
 import discourseComputed from "discourse-common/utils/decorators";
+import { htmlSafe } from "@ember/template";
 
 export default class EngagementPathway extends Component {
   @service messageBus;
@@ -38,7 +39,7 @@ export default class EngagementPathway extends Component {
     this.unsubscribe();
     this.router.off("routeDidChange", this, this.#setShowHere);
   }
-  
+
   #setShowHere() {
     this.showHere = (['discovery.latest', 'discovery.unread', 'discovery.top', 'discovery.new', 'discovery.categories'].includes(this.router.currentRouteName));
   }
@@ -69,13 +70,13 @@ export default class EngagementPathway extends Component {
         t.push({
           url:  I18n.t(`engagement_pathway.level_${data.level}${goal}_link`),
           icon: completed ? 'check-circle' : I18n.t(`engagement_pathway.level_${data.level}${goal}_icon`),
-          text: I18n.t(`engagement_pathway.level_${data.level}${goal}_text`), 
+          text: I18n.t(`engagement_pathway.level_${data.level}${goal}_text`),
           status: completed
         });
       });
       this.endlevel = false
       this.tasks = t;
-      this.message = I18n.t(`engagement_pathway.level_${data.level}_message`);
+      this.message = htmlSafe(I18n.t(`engagement_pathway.level_${data.level}_message`));
     } else {
       this.info = [
         { html: I18n.t("engagement_pathway.endlevel_contrib", { count: (data.contribution_count || 0).toLocaleString('en-US', { useGrouping: true, groupingSeparator: ',' }) })},

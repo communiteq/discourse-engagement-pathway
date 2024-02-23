@@ -1,7 +1,7 @@
 # name: discourse-engagement-pathway
 # about: Discourse Engagement Pathway plugin
-# version: 1.4
-# authors: richard@communiteq.com
+# version: 1.5
+# authors: Communiteq
 # url: https://www.communiteq.com/
 
 enabled_site_setting :engagement_pathway_enabled
@@ -14,7 +14,7 @@ after_initialize do
 
   register_user_custom_field_type('engagement_info', :json)
 
-  add_to_serializer(:current_user, :engagement_info) do 
+  add_to_serializer(:current_user, :engagement_info) do
     object.custom_fields['engagement_info']
   end
 
