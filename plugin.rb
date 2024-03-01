@@ -1,6 +1,6 @@
 # name: discourse-engagement-pathway
 # about: Discourse Engagement Pathway plugin
-# version: 1.5
+# version: 1.5.1
 # authors: Communiteq
 # url: https://www.communiteq.com/
 
