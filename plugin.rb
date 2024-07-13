@@ -1,6 +1,6 @@
 # name: discourse-engagement-pathway
 # about: Discourse Engagement Pathway plugin
-# version: 1.5.1
+# version: 1.5.2
 # authors: Communiteq
 # url: https://www.communiteq.com/
 
@@ -26,6 +26,7 @@ after_initialize do
     end
 
     def set_current_ep_level(current_info)
+      total_reads = Post.joins(:topic).where(user_id: self.id, topics: { archetype: 'regular' }).sum(:reads)
       info = {
         level: current_info[:level],
         goals: current_info[:goals].map { |k, v| [k.to_s, v] }.to_h,
@@ -33,7 +34,7 @@ after_initialize do
         emoji_from: current_info[:emoji_from] || 0,
         emoji_to: current_info[:emoji_to] || 0,
         likes_received: self&.user_stat&.likes_received,
-        posts_read_count: self&.user_stat&.posts_read_count,
+        posts_read_count: total_reads,
         contribution_count: self&.user_stat&.topic_count + self&.user_stat&.post_count,
       }.map { |k, v| [k.to_s, v] }.to_h
 
