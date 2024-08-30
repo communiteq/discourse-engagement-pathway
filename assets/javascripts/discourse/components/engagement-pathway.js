@@ -15,7 +15,7 @@ export default class EngagementPathway extends Component {
 
   @tracked endlevel = false;
   @tracked info = [];
-  @tracked header = '';
+  @tracked linksHeader = '';
   @tracked links = [];
 
   @tracked emojiSrc = '/images/emoji/twitter/fireworks.png?v=12';
@@ -83,7 +83,7 @@ export default class EngagementPathway extends Component {
         { html: I18n.t("engagement_pathway.endlevel_viewed", { count: (data.posts_read_count || 0).toLocaleString('en-US', { useGrouping: true, groupingSeparator: ',' }) })},
         { html: I18n.t("engagement_pathway.endlevel_liked", { count: (data.likes_received || 0).toLocaleString('en-US', { useGrouping: true, groupingSeparator: ',' }) })}
       ];
-      this.header = htmlSafe(I18n.t(`engagement_pathway.level_${data.level}_header`));
+      this.linksHeader = htmlSafe(I18n.t(`engagement_pathway.level_${data.level}_header`));
       this.links = [
         { html: I18n.t(`engagement_pathway.level_${data.level}_html_1`) },
         { html: I18n.t(`engagement_pathway.level_${data.level}_html_2`) },
