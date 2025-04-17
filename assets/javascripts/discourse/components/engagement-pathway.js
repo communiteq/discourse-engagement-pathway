@@ -69,7 +69,7 @@ export default class EngagementPathway extends Component {
         }
         t.push({
           url:  I18n.t(`engagement_pathway.level_${data.level}${goal}_link`),
-          icon: completed ? 'check-circle' : I18n.t(`engagement_pathway.level_${data.level}${goal}_icon`),
+          icon: completed ? 'circle-check' : I18n.t(`engagement_pathway.level_${data.level}${goal}_icon`),
           text: I18n.t(`engagement_pathway.level_${data.level}${goal}_text`),
           status: completed
         });
