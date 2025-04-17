@@ -1,24 +1,24 @@
- {{#if showHere}}
+ {{#if this.showHere}}
   <div class="engagement-pathway-wrapper">
     <div class="wrap engagement-pathway-banner">
       <div class="ep-wrapper">
-        {{#if endlevel}}
+        {{#if this.endlevel}}
           <div class="ep-info">
             <b>{{i18n "engagement_pathway.endlevel_message"}}</b>
-            {{#each info as |i|}}
+            {{#each this.info as |i|}}
               <div class="infoline">
               {{{i.html}}}
               </div>
             {{/each}}
-            {{#if showEmoji}}
-              <img src="{{emojiSrc}}" width="20" height="20">
-              <img src="{{emojiSrc}}" width="20" height="20">
-              <img src="{{emojiSrc}}" width="20" height="20">
+            {{#if this.showEmoji}}
+              <img src="{{this.emojiSrc}}" width="20" height="20">
+              <img src="{{this.emojiSrc}}" width="20" height="20">
+              <img src="{{this.emojiSrc}}" width="20" height="20">
             {{/if}}
           </div>
           <div class="ep-links">
             <div class="ep-links-header">{{{linksHeader}}}</div>
-            {{#each links as |link|}}
+            {{#each this.links as |link|}}
               <div>
               {{{link.html}}}
               </div>
@@ -26,10 +26,10 @@
           </div>
         {{else}}
           <div class="ep-content">
-            {{{message}}}
+            {{{this.message}}}
           </div>
           <div class="ep-level-task">
-            {{#each tasks as |t|}}
+            {{#each this.tasks as |t|}}
               <div class="task">
                 <a href="{{t.url}}">
                   <h3 class={{t.status}}>
