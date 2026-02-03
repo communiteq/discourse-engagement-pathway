@@ -1,8 +1,7 @@
 import Component from "@glimmer/component";
-import { inject as service } from "@ember/service";
+import { service } from "@ember/service";
 import { bind } from "discourse-common/utils/decorators";
 import { tracked } from "@glimmer/tracking";
-import discourseComputed from "discourse-common/utils/decorators";
 import { htmlSafe } from "@ember/template";
 
 export default class EngagementPathway extends Component {
